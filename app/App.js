@@ -1,52 +1,53 @@
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
+import { Stack, Tabs } from 'expo-router';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import Items from '../src/Items';
-import List from '../src/List';
+import Items from './src/Items';
+import List from './src/List';
 // import Done from './src/Done';
-import AddItemForm from '../src/AddItemForm';
-import AddStoreForm from '../src/AddStoreForm';
-import CreateShoppingListForm from '../src/CreateShoppingListForm';
-import Stores from '../src/Stores';
-import Splash from '../src/Splash';
-import { selectAllItems, shoppingItems } from '../src/redux/itemsSlice';
+import AddItemForm from './src/AddItemForm';
+import AddStoreForm from './src/AddStoreForm';
+// import CreateShoppingListForm from '../src/CreateShoppingListForm';
+import Stores from './src/Stores';
+import Splash from './src/Splash';
+import { selectAllItems, shoppingItems } from './src/redux/itemsSlice';
 import { useSelector } from 'react-redux';
 import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 
 
 
-const Tab = createBottomTabNavigator()
-const Stack = createStackNavigator()
+// const Tab = createBottomTabNavigator()
+// const Stack = createStackNavigator()
 
 function App() {
-  const shoppingItems = useSelector(selectAllItems)
-  const shoppingList = shoppingItems.filter(item=> item.isList === true)
-  // const doneList = shoppingItems.filter(item => item.isDone === true)
-  const itemsList = shoppingItems.filter(item=> item.isItem)
+  // const shoppingItems = useSelector(selectAllItems)
+  // const shoppingList = shoppingItems.filter(item=> item.isList === true)
+  // // const doneList = shoppingItems.filter(item => item.isDone === true)
+  // const itemsList = shoppingItems.filter(item=> item.isItem)
 
  
-  const [isSplash, setIsSplash] = useState(true);
+  // const [isSplash, setIsSplash] = useState(true);
  
-  useEffect(()=>{
-    setTimeout(() => {
-      setIsSplash(false);
-    }, 2500);
-  },[])
+  // useEffect(()=>{
+  //   setTimeout(() => {
+  //     setIsSplash(false);
+  //   }, 2500);
+  // },[])
 
     
   return (
  
-    <NavigationContainer>
-      {isSplash ? (
-         <Stack.Navigator>
-         <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-       </Stack.Navigator>
-      ):(
+    // <>
+    //   {isSplash ? (
+    //      <Stack.Navigator>
+    //      <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+    //    </Stack.Navigator>
+    //   ):(
 
      
-      <Tab.Navigator
+      <Tabs
         screenOptions={({ route }) => ({
           tabBarIcon: ({focused, size, color}) => {
             let iconName;
@@ -84,21 +85,21 @@ function App() {
       
         
       >
-        <Tab.Screen 
+        <Tabs.Screen 
           name='Stores'
           component={StoresTabNavigator}
           options={{headerShown: false,
                     tabBarLabelStyle: {fontSize: 15}}}
         />
-        <Tab.Screen 
+        <Tabs.Screen 
           name='List'
           component={ListTabNavigator} 
-          options={{tabBarBadge: shoppingList.length ? shoppingList.length :  null,
+          options={{
             headerShown: false,
             tabBarLabelStyle: {fontSize: 15}
           }}
           
-          
+          // tabBarBadge: shoppingList.length ? shoppingList.length :  null,
         />
          {/* <Tab.Screen 
           name='Done List'
@@ -111,7 +112,7 @@ function App() {
                     tabBarLabelStyle: {fontSize: 15}
           }}
         /> */}
-          <Tab.Screen 
+          <Tabs.Screen 
           name='Items'
           component={ItemsTabNavigator}
           options={{ headerShown: false,
@@ -119,18 +120,18 @@ function App() {
                     // tabBarBadge: itemsList.length ? itemsList.length :  null, 
                     }}
         />
-    </Tab.Navigator>  
+    </Tabs>  
       )}
-    </NavigationContainer>
+    // </>
  
-  );
-}
+  // );
+// }
 
 function ItemsTabNavigator(){
   const navigation = useNavigation();
   return(
    
-      <Stack.Navigator>
+      <Stack>
      
       <Stack.Screen 
           name='Items List'
@@ -150,7 +151,7 @@ function ItemsTabNavigator(){
           name='Item'
           component={AddItemForm}
          />       
-      </Stack.Navigator>
+      </Stack>
   )
 }
 
@@ -158,7 +159,7 @@ function StoresTabNavigator(){
   const navigation = useNavigation();
   return(
    
-      <Stack.Navigator>
+      <Stack>
      
       <Stack.Screen 
           name='Stores List'
@@ -183,7 +184,7 @@ function StoresTabNavigator(){
           options={{headerShown: false}}
          />
       
-      </Stack.Navigator>
+      </Stack>
   )
 }
 
@@ -191,7 +192,7 @@ function ListTabNavigator(){
   const navigation = useNavigation();
   return(
    
-      <Stack.Navigator>
+      <Stack>
      
       <Stack.Screen 
           name='Grocery List'
@@ -211,7 +212,7 @@ function ListTabNavigator(){
           options={{headerShown: false}}
          />
       
-      </Stack.Navigator>
+      </Stack>
   )
 }
 

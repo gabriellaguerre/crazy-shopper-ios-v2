@@ -14,9 +14,9 @@
 // import Splash from '../src/Splash';
 // import { selectAllItems, shoppingItems } from '../src/redux/itemsSlice';
 // import { useSelector } from 'react-redux';
-// import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
+import {Text,View, StyleSheet } from 'react-native';
 
-
+import App from "./App";
 
 // const Tab = createBottomTabNavigator()
 // const Stack = createStackNavigator()
@@ -163,15 +163,7 @@
    
 // //       <Stack.Navigator>
      
-// //       <Stack.Screen 
-// //           name='Stores List'
-// //           component={Stores}
-// //           options={{ headerTitleAlign: 'center',
-// //                      headerRight: ()=> <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonStore} onPress={()=>{navigation.navigate('Store')}} >
-// //                      <FontAwesome5 name={'plus'} size={20} color={'white'}/>
-// //                     </TouchableOpacity></View>,
-// //                     headerStyle: {backgroundColor: '#C0C0C0'},
-// //                     headerTintColor: '#094a85',
+// //       <Stack.Screen  TouchableOpacity, StyleSheet, View, 
 // //                     headerTitleStyle: {fontWeight: 'bold', fontSize: 25}
                      
 // //                   }}
@@ -257,9 +249,17 @@ import { Stack } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
+    <View style={styles.main}>
+      <Text>HEllo</Text>
+    </View>
   );
 }
 
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  }
+})
