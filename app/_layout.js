@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import Splash from './src/Splash';
+import App from '../App';
 
 
 export default function RootLayout({ children }) {
@@ -16,14 +17,14 @@ export default function RootLayout({ children }) {
   }, []);
 
   if(isSplash) {
-    return <Splash />;
+      return <Splash />
+  } else {
+    return  <Provider store={store}>
+        <App />
+    </Provider>
   }
 
-  return (
-    <Provider store={store}>
-        {children}
-    </Provider>
-  );
+ 
 }
 
 // const styles = StyleSheet.create({
