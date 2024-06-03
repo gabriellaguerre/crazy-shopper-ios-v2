@@ -22,7 +22,7 @@ export default function MainTabNavigator() {
           if (route.name === 'Items') {
             iconName = 'list';
             size = focused ? 25 : 20;
-          } else if (route.name === 'Store') {
+          } else if (route.name === 'Stores') {
             iconName = 'store';
             size = focused ? 25 : 20;
           } else if (route.name === 'List') {

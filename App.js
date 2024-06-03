@@ -12,11 +12,9 @@ const DummyComponent = () => (
 export default function App() {
   console.log('Rendering App.js')
   return (
-    <NavigationContainer>
-      <RootLayout>
-         <DummyComponent />
-       </RootLayout>
-     </NavigationContainer>
+ 
+         <MainTabNavigator />
+   
   );
 }
 

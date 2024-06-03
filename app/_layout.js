@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import Splash from './src/Splash';
 import { View, Text } from 'react-native';
-
+import App from '../App'
 
 
 
@@ -28,9 +28,10 @@ export default function RootLayout({ children }) {
   console.log("Showing Main Content")
   return  (
     <Provider store={store}>
-       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+       {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <Text>Hello There</Text>
-     </View>
+     </View> */}
+     <App />
     </Provider>
   )
 }
