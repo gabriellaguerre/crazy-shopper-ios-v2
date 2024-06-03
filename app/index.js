@@ -11,7 +11,9 @@ import { selectAllItems } from './src/redux/itemsSlice';
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNavigator() {
-  console.log("IN MAIN TABS")
+  
+  console.log("Rendering MainTabNavigator");
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

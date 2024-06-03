@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import Splash from './src/Splash';
+import { View, Text } from 'react-native';
+
 
 
 
 export default function RootLayout({ children }) {
-  console.log("IN SPLASH")
+  
+  console.log("Rendering RootLayout");
   console.log(children, 'CHILDREN')
+
   const [isSplash, setIsSplash] = useState(true);
 
   useEffect(() => {
@@ -17,11 +21,16 @@ export default function RootLayout({ children }) {
   }, []);
 
   if(isSplash) {
+    console.log("Showing Splash Screen")
       return <Splash />
   }
+
+  console.log("Showing Main Content")
   return  (
     <Provider store={store}>
-     {children}
+       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>Hello There</Text>
+     </View>
     </Provider>
   )
 }
