@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 // import ItemsNavigator from './items';
 // import ListNavigator from './list';
 // import StoresNavigator from './stores';
-import { selectAllItems } from '../redux/itemsSlice';
+import { selectAllItems } from '../../redux/itemsSlice';
 
 
 
@@ -21,13 +21,13 @@ export default function TabLayout() {
           let iconName;
           if (route.name === 'items') {
             iconName = 'list';
-            size = focused ? 25 : 20;
-          } else if (route.name === 'stores') {
+            size = focused ? 30 : 25;
+          } else if (route.name === 'index') {
             iconName = 'store';
-            size = focused ? 25 : 20;
+            size = focused ? 30 : 25;
           } else if (route.name === 'list') {
             iconName = 'cart-arrow-down';
-            size = focused ? 25 : 20;
+            size = focused ? 30 : 25;
           }
           return <FontAwesome5 name={iconName} size={size} color={color} />;
         },
@@ -36,14 +36,15 @@ export default function TabLayout() {
       })}
     >
       <Tabs.Screen
-        name="stores"
+        name="index"
         // component={StoresNavigator}
         options={{
+          title: 'Stores',
           headerShown: false,
           tabBarLabelStyle: { fontSize: 15 },
         }}
       />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="list"
         // component={ListNavigator}
         options={{
@@ -59,7 +60,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarLabelStyle: { fontSize: 15 },
         }}
-      /> */}
+      />
     </Tabs>
   );
 }

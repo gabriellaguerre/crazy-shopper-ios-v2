@@ -7,7 +7,7 @@ function Splash({navigation}) {
       <View style={styles.body}>
         <Image 
           style={styles.logo}
-          source={require('./(tabs)/assets/shopping-cart-logo.png')}
+          source={require('../assets/shopping-cart-logo.png')}
         />
         <Text style={styles.text}> Crazy Shopper </Text>
       </View>

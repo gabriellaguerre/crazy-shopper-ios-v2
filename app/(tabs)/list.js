@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react'
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
-import { selectAllItems, addItem, updateItem, deleteAllItems } from './redux/itemsSlice';
-import { selectAllStores, addStore, updateStore, deleteAllStores } from './redux/storesSlice';
+import { selectAllItems, addItem, updateItem, deleteAllItems } from '../../redux/itemsSlice';
+import { selectAllStores, addStore, updateStore, deleteAllStores } from '../../redux/storesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -187,7 +187,7 @@ const toggleShowMenu = (id) => {
              <TouchableOpacity onPress={()=>{ addToItemList(item); }}>
              <Image 
                 style={styles.addToCart}
-                source={require('./assets/shopping-cart-and-red-arrow-2026.png')} />
+                source={require('../../assets/shopping-cart-and-red-arrow-2026.png')} />
                {/* <FontAwesome5 name={'check'} size={25} color={'green'} /> */}
              </TouchableOpacity>
              </View>
@@ -218,12 +218,12 @@ const toggleShowMenu = (id) => {
            {showMenu[item.id] ? (
                <Image 
                  style={styles.arrows}
-                 source={require('./assets/arro-up-3100.png')}
+                 source={require('../../assets/arro-up-3100.png')}
                   />
                   ):(
             <Image 
               style={styles.arrows}
-               source={require('./assets/arrow-down-3101.png')}
+               source={require('../../assets/arrow-down-3101.png')}
                 />
              )}
           </TouchableOpacity>
@@ -238,7 +238,7 @@ const toggleShowMenu = (id) => {
         <Text style={styles.itemTitle} numberOfLines={1}>{item.item}</Text>
         <TouchableOpacity onPress={() => addToItemList(item)}>
         <Image 
-          style={styles.addToCart} source={require('./assets/shopping-cart-and-red-arrow-2026.png')} />
+          style={styles.addToCart} source={require('../../assets/shopping-cart-and-red-arrow-2026.png')} />
          </TouchableOpacity>
           </View>
         {item.desc ? (

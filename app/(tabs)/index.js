@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, StyleSheet, Text, TouchableOpacity, View, Button, Alert, FlatList, Image, Pressable} from 'react-native';
+import { useRouter } from 'expo-router'
+
+import { Modal, StyleSheet, Text, TouchableOpacity, View, Button, Alert, FlatList, Image, Pressable, SafeAreaView} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllItems, addItem } from '../redux/itemsSlice';
-import { selectAllStores, addStore, updateStore, deleteStore, deleteAllStores } from '../redux/storesSlice';
-import { CommonActions } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { selectAllItems, addItem } from '../../redux/itemsSlice';
+import { selectAllStores, addStore, updateStore, deleteStore, deleteAllStores } from '../../redux/storesSlice';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function Stores({navigation}) {
+  const router = useRouter()
+  
   const stores = useSelector(selectAllStores)
   const items = useSelector(selectAllItems)
-  // const navigation = useNavigation();
+
   const dispatch = useDispatch()
   
   const [modalVisible, setModalVisible] = useState(false)
@@ -44,9 +47,7 @@ function Stores({navigation}) {
     const getStores = async () => {
       try {
          const jsonValue = await AsyncStorage.getItem('Stores')
-         if(jsonValue !== null){  <Stack>
-          <Stack.Screen name="(tabs)" />
-         </Stack>
+         if(jsonValue !== null){  
           const storesArray = JSON.parse(jsonValue)
         
           if(Array.isArray(storesArray)){
@@ -139,7 +140,7 @@ function Stores({navigation}) {
 
     return (
      
-       <View style={styles.body}>
+       <SafeAreaView style={styles.body}>
         <Modal 
           // animationType='slide'
           transparent={true}
@@ -206,7 +207,7 @@ function Stores({navigation}) {
                     >
                    <Image 
                     style={styles.logo}
-                    source={require('../assets/store_pic.png')}
+                    source={require('../../assets/store_pic.png')}
                   /></TouchableOpacity>
                   <Text style={styles.title} numberOfLines={1} >{store.name}</Text>
                   <Text style={styles.subtitle} numberOfLines={1} > {store.description}</Text>
@@ -227,23 +228,24 @@ function Stores({navigation}) {
           <View style={styles.imageBody}>
         <Image 
           style={styles.logo}
-          source={require('../assets/store-empty.png')}
+          source={require('../../assets/store-empty.png')}
         />
         <Text>NO STORES ARE ADDED YET</Text>
         <Text>CLICK ON THE PLUS BUTTON ON TOP OR BELOW</Text>
-        <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonEmpty} onPress={()=>{navigation.navigate('Store')}} >
+        <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonEmpty} onPress = {()=> router.push("/AddStoreForm")}>
                      <FontAwesome5 name={'plus'} size={20} color={'white'}/>
                     </TouchableOpacity></View>
       </View>
          )
          )}
      
-      </View>      
+      </SafeAreaView>      
         
     )
 }
 const styles = StyleSheet.create({
     body: {
+      // marginTop: 20,
       flex: 1,
       backgroundColor: '#C0C0C0',
     },

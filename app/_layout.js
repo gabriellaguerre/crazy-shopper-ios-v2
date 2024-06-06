@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
+import { store } from '../redux/store';
 import Splash from './Splash';
 import { View, Text } from 'react-native';
 // import App from '../App'
@@ -33,7 +33,11 @@ export default function RootLayout() {
      </View> */}
      {/* <App /> */}
      <Stack>
-      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
+    
+      <Stack.Screen name="AddItemForm"  options={{ headerShown: false }}/>
+
+      <Stack.Screen name="AddStoreForm" options={{ headerShown: false }}/>
      </Stack>
     </Provider>
   )

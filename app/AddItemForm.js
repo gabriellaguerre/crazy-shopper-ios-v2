@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View, TextInput, Button, Alert, TouchableOpacity } from 'react-native'
+import { useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, updateItem, selectAllItems } from './redux/itemsSlice';
+import { addItem, updateItem, selectAllItems } from '../redux/itemsSlice';
 import { nanoid } from '@reduxjs/toolkit';
 
 
 
 
 function AddItemForm({navigation, route}) {
-  const {item: thisitem} = route.params ? route.params : 0
+
+  const params = useLocalSearchParams()
+  const {item: thisitem} = params ? params : 0
  
   const items = useSelector(selectAllItems)
   const dispatch = useDispatch()

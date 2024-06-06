@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import { useLocalSearchParams } from 'expo-router';
 import { Modal, StyleSheet, Text, TouchableOpacity, View, Button, Alert, FlatList, Image, Pressable} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllItems, addItem, deleteAllItems, updateItem, deleteItem } from '../redux/itemsSlice';
-import { updateStore, selectAllStores } from '../redux/storesSlice';
+import { selectAllItems, addItem, deleteAllItems, updateItem, deleteItem } from '../../redux/itemsSlice';
+import { updateStore, selectAllStores } from '../../redux/storesSlice';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function Items({navigation, route, handleDoneClick}) {
+
+  const params = useLocalSearchParams()
  
  
-  const { editStore } = route.params ? route.params : 0
+  const { editStore } = params ? params : 0
   // console.log(editStore, 'editStoreeeeee')
  
   const items = useSelector(selectAllItems)
@@ -188,7 +191,7 @@ function Items({navigation, route, handleDoneClick}) {
                 <Image 
                 style={styles.storeAddToCart}
                 // color={'green'}
-                source={require('./assets/add-to-cart-3046.png')}/>
+                source={require('../../assets/add-to-cart-3046.png')}/>
                 </TouchableOpacity>
                   </View>
                 ):(
@@ -197,7 +200,7 @@ function Items({navigation, route, handleDoneClick}) {
                  <View style={styles.itemAndCart}>
                   <Text style={styles.title} numberOfLines={1}>{item.item}</Text>
                   <TouchableOpacity  onPress={()=>{addToShoppingList(item); }}>
-                <Image style={styles.addToCart} source={require('./assets/add-to-cart-3046.png')}/>
+                <Image style={styles.addToCart} source={require('../../assets/add-to-cart-3046.png')}/>
                 </TouchableOpacity>
                 </View>
                
@@ -211,12 +214,12 @@ function Items({navigation, route, handleDoneClick}) {
                   {showMenu[item.id] ? (
                      <Image 
                      style={styles.arrows}
-                     source={require('./assets/arro-up-3100.png')}
+                     source={require('../../assets/arro-up-3100.png')}
                    />
                   ):(
                   <Image 
                   style={styles.arrows}
-                  source={require('./assets/arrow-down-3101.png')}
+                  source={require('../../assets/arrow-down-3101.png')}
                 />
                   )}
                  </TouchableOpacity>
@@ -231,14 +234,14 @@ function Items({navigation, route, handleDoneClick}) {
                <Image 
                 style={styles.addToCart}
                 // color={'green'}
-                source={require('./assets/pencil-5824.png')}/>
+                source={require('../../assets/pencil-5824.png')}/>
                 </TouchableOpacity>              
                 <TouchableOpacity  style={styles.fontButton} onPress={()=>{setModalVisible(true); setThisId(item.id); setThisItem(item.item)}}>
                   {/* <FontAwesome5 name={'trash'} size={25} color={'red'} /> */}
                 <Image 
                 style={styles.addToCart}
                 // color={'green'}
-                source={require('./assets/trash-can-10417.png')}/>
+                source={require('../../assets/trash-can-10417.png')}/>
                 </TouchableOpacity>
                 </View>
                  ):(
@@ -259,7 +262,7 @@ function Items({navigation, route, handleDoneClick}) {
           <View style={styles.imageBody}>
           <Image 
           style={styles.logo}
-          source={require('./assets/list.png')}
+          source={require('../../assets/list.png')}
         />
         {editStore && newItems.length === 0? (
           <View>

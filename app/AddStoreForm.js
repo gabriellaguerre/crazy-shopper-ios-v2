@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Text, StyleSheet, View, TextInput, Button, Alert, TouchableOpacity } from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Text, StyleSheet, View, TextInput, Button, Alert, TouchableOpacity, SafeAreaView } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 // import { addItem, updateItem, selectAllItems } from './redux/itemsSlice';
-import { addStore, updateStore, selectAllStores } from './redux/storesSlice';
+import { addStore, updateStore, selectAllStores } from '../redux/storesSlice';
 import { nanoid } from '@reduxjs/toolkit';
 
 
 
 
 function AddStoreForm({navigation, route}) {
-  const {store: thisStore} = route.params ? route.params : 0
+  const router = useRouter()
+  const params = useLocalSearchParams()
+
+  const {store: thisStore} = params ? params : 0
  
   const stores = useSelector(selectAllStores)
   const dispatch = useDispatch()
@@ -45,7 +49,7 @@ function AddStoreForm({navigation, route}) {
         setIsStore(true)
         // setIsList(false)s
         // setIsDone(false)
-        navigation.navigate("Stores List")
+        router.back()
         const storesList = [...stores, newStore]
         const jsonValue = JSON.stringify(storesList)
         await AsyncStorage.setItem('Stores', jsonValue)
@@ -64,7 +68,7 @@ function AddStoreForm({navigation, route}) {
         if(name) {
           const editStore = {id: thisStore.id, name: name.toUpperCase(), description, isStore}
           dispatch(updateStore(editStore))
-          navigation.goBack()
+          router.back()
           Alert.alert('Success', `Successfully edited ${name.toUpperCase()}`)
           setName('')
           setDescription('')
@@ -90,7 +94,7 @@ function AddStoreForm({navigation, route}) {
    
     return (
     
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         
         <TextInput 
             style={styles.input}
@@ -126,7 +130,7 @@ function AddStoreForm({navigation, route}) {
             )}
          
         </View>
-      </View>
+      </SafeAreaView>
      
       
     )
@@ -134,7 +138,8 @@ function AddStoreForm({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    // marginTop: 300,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
