@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import { store } from './src/redux/store';
-import Splash from './src/Splash';
+import { store } from './redux/store';
+import Splash from './Splash';
 import { View, Text } from 'react-native';
-import App from '../App'
+// import App from '../App'
+import { Stack } from 'expo-router/stack'
 
 
-
-export default function RootLayout({ children }) {
+export default function RootLayout() {
   
   console.log("Rendering RootLayout");
-  console.log(children, 'CHILDREN')
+  // console.log(children, 'CHILDREN')
 
   const [isSplash, setIsSplash] = useState(true);
 
@@ -31,7 +31,10 @@ export default function RootLayout({ children }) {
        {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <Text>Hello There</Text>
      </View> */}
-     <App />
+     {/* <App /> */}
+     <Stack>
+      <Stack.Screen name="(tabs)" />
+     </Stack>
     </Provider>
   )
 }
