@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Text, StyleSheet, View, TextInput, Button, Alert, TouchableOpacity } from 'react-native'
-import { useLocalSearchParams } from 'expo-router';
+import { Text, StyleSheet, View, TextInput, Button, Alert, TouchableOpacity, SafeAreaView } from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, updateItem, selectAllItems } from '../redux/itemsSlice';
@@ -11,6 +11,7 @@ import { nanoid } from '@reduxjs/toolkit';
 
 function AddItemForm({navigation, route}) {
 
+  const router = useRouter()
   const params = useLocalSearchParams()
   const {item: thisitem} = params ? params : 0
  
@@ -56,7 +57,7 @@ function AddItemForm({navigation, route}) {
         setIsDone(false)
         setStoreName(null)
         // navigation.navigate("Items List")
-        navigation.goBack()
+        router.back()
         const itemsList = [...items, newItem]
         const jsonValue = JSON.stringify(itemsList)
         await AsyncStorage.setItem('Items', jsonValue)
@@ -74,7 +75,7 @@ function AddItemForm({navigation, route}) {
         if(itemName) {
           const editItem = {id: thisitem.id, item: itemName, desc, storeName, isItem, isList, isDone}
           dispatch(updateItem(editItem))
-          navigation.goBack()
+          router.back()
           Alert.alert('Success', `Successfully edited ${itemName}`)
           setItemName('')
           setDesc('')
@@ -100,7 +101,7 @@ function AddItemForm({navigation, route}) {
    
     return (
     
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         
         <TextInput 
             style={styles.input}
@@ -136,7 +137,7 @@ function AddItemForm({navigation, route}) {
             )}
          
         </View>
-      </View>
+      </SafeAreaView>
      
       
     )
@@ -144,7 +145,7 @@ function AddItemForm({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,

@@ -9,9 +9,7 @@ import { Stack } from 'expo-router/stack'
 
 export default function RootLayout() {
   
-  console.log("Rendering RootLayout");
-  // console.log(children, 'CHILDREN')
-
+ 
   const [isSplash, setIsSplash] = useState(true);
 
   useEffect(() => {
@@ -25,13 +23,10 @@ export default function RootLayout() {
       return <Splash />
   }
 
-  console.log("Showing Main Content")
+ 
   return  (
     <Provider store={store}>
-       {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Hello There</Text>
-     </View> */}
-     {/* <App /> */}
+  
      <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
     
@@ -43,16 +38,4 @@ export default function RootLayout() {
   )
 }
 
-// const styles = StyleSheet.create({
-//   touchContainer: {
-//     marginRight: 10,
-//   },
-//   buttonItem: {
-//     width: 35,
-//     height: 35,
-//     borderRadius: 30,
-//     backgroundColor: '#094a85',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// });
+

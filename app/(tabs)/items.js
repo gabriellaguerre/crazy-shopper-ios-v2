@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Modal, StyleSheet, Text, TouchableOpacity, View, Button, Alert, FlatList, Image, Pressable} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Items({navigation, route, handleDoneClick}) {
 
+  const router = useRouter()
   const params = useLocalSearchParams()
  
  
@@ -93,8 +94,8 @@ function Items({navigation, route, handleDoneClick}) {
        
     }
     const handleDone = () => {
-      navigation.navigate('List')
-      navigation.goBack() 
+      router.push("/list")
+      router.back() 
     }
 
     const returnStore = async (store) => {
@@ -272,7 +273,7 @@ function Items({navigation, route, handleDoneClick}) {
           <>
           <Text>NO ITEMS ARE ADDED YET</Text>
         <Text>CLICK ON THE PLUS BUTTON ON TOP OR BELOW</Text>
-        <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonEmpty} onPress={()=>{navigation.navigate('Item')}} >
+        <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonEmpty} onPress={()=>router.push("/AddItemForm")}>
                      <FontAwesome5 name={'plus'} size={20} color={'white'}/>
                     </TouchableOpacity></View>
                     </>

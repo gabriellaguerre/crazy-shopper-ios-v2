@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react'
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { selectAllItems, addItem, updateItem, deleteAllItems } from '../../redux/itemsSlice';
 import { selectAllStores, addStore, updateStore, deleteAllStores } from '../../redux/storesSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -257,9 +257,9 @@ const updateList = (editStore) => {
 }
  
 return (
-  <View style={styles.body}>
+  <SafeAreaView style={styles.body}>
     <FlatList data={combinedData} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} />
-  </View>
+  </SafeAreaView>
 );
   
 }
