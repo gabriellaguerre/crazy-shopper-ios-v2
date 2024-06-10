@@ -138,8 +138,8 @@ function AddStoreForm({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    // marginTop: 300,
-    flex: 1,
+    marginTop: 100,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,

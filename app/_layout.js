@@ -19,7 +19,7 @@ export default function RootLayout() {
   }, []);
 
   if(isSplash) {
-    console.log("Showing Splash Screen")
+   
       return <Splash />
   }
 
@@ -28,11 +28,24 @@ export default function RootLayout() {
     <Provider store={store}>
   
      <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
+      <Stack.Screen name="(tabs)" options={{headerShown: false, }}/>
     
-      <Stack.Screen name="AddItemForm"  options={{ headerShown: false }}/>
+      <Stack.Screen name="AddItemForm"  options={{  headerBackTitle: 'Back', 
+                                                    headerBackTitleStyle: {
+                                                      color: '#094a85'
+                                                    },
+                                                    title: 'Item',
+                                                    headerTitleStyle: {
+                                                    color: '#094a85',
+                                                    fontSize: 25,
+                                                    }}}/>
 
-      <Stack.Screen name="AddStoreForm" options={{ headerShown: false }}/>
+      <Stack.Screen name="AddStoreForm" options={{ headerBackTitle: 'Back', 
+                                                   title: 'Store',
+                                                   headerTitleStyle: {
+                                                    color: '#094a85',
+                                                    fontSize: 25,
+                                                    }}}/>
      </Stack>
     </Provider>
   )

@@ -44,7 +44,7 @@ export default function TabLayout() {
         options={{
           title: 'Stores',
           headerTitleAlign: 'center',
-          headerRight: ()=> <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonStore} onPress={()=>{router.push("/AddStoreItem")}} >
+          headerRight: ()=> <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonStore} onPress={()=>{router.push("/AddStoreForm")}} >
           <FontAwesome5 name={'plus'} size={20} color={'white'}/>
          </TouchableOpacity></View>,
          headerStyle: {backgroundColor: '#C0C0C0'},
@@ -57,6 +57,7 @@ export default function TabLayout() {
         name="list"
         // component={ListNavigator}
         options={{
+          title: 'List',
           headerTitleAlign: 'center',
           headerStyle: {backgroundColor: '#C0C0C0'},
           headerTintColor: '#696969',
@@ -70,8 +71,9 @@ export default function TabLayout() {
         name="items"
         // component={ItemsNavigator}
         options={{
+          title: 'Items',
           headerTitleAlign: 'center',
-        headerRight: ()=> <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonItem} onPress={()=>{navigation.navigate('Item')}} >
+        headerRight: ()=> <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonItem} onPress={()=>{router.push("/AddItemForm")}} >
         <FontAwesome5 name={'plus'} size={20} color={'white'}/>
        </TouchableOpacity></View>,
        headerStyle: {backgroundColor: '#C0C0C0'},
