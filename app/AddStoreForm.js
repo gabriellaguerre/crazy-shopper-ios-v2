@@ -104,7 +104,7 @@ function AddStoreForm({navigation, route}) {
             />
 
         <TextInput 
-            style={styles.input}
+            style={styles.input }
             placeholder='Enter Store Description (optional)'
             value={description}
             onChangeText={(value)=>setDescription(value)}
@@ -143,16 +143,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    // width: '80%',
   },
   input: {
     backgroundColor: 'white',
-    width: '100%',
+    width: '80%',
+    height: 50,
     borderWidth: 1,
     borderRadius: 10,
     textAlign: 'left',
     fontSize: 20,
     margin: 10,
     paddingHorizontal: 10,
+    elevation: 5,   
   },
   addItemButton: {
     borderRadius: 30,

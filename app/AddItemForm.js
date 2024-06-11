@@ -145,17 +145,19 @@ function AddItemForm({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    // flex: 1,
+    marginTop: 100,
+    // justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    // padding: 10,
   },
   input: {
     backgroundColor: 'white',
-    width: '100%',
+    width: '80%',
+    height: 50,
     borderWidth: 1,
     borderRadius: 10,
-    textAlign: 'left',
+    // textAlign: 'left',
     fontSize: 20,
     margin: 10,
     paddingHorizontal: 10,

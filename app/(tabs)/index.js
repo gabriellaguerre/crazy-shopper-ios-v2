@@ -120,7 +120,8 @@ function Stores({navigation}) {
         const jsonStoreValue = JSON.stringify(updatedStores)
         await AsyncStorage.setItem('Stores', jsonStoreValue)
         // console.log({ editStore}, 'ooooooooo')
-        navigation.navigate('Items List',{editStore})
+        // navigation.navigate('Items List',{editStore})
+        router.push({pathname:"/items", params: editStore})
     
       } catch (error) {
         console.log(error)

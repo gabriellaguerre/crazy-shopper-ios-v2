@@ -13,11 +13,11 @@ function Items({navigation, route, handleDoneClick}) {
 
   const router = useRouter()
   const params = useLocalSearchParams()
+  const { editStore } = params
  
- 
-  const { editStore } = params ? params : 0
-  // console.log(editStore, 'editStoreeeeee')
- 
+  const thisStore = params ? params : 0
+  const aStore = Object.values(thisStore)
+  
   const items = useSelector(selectAllItems)
   const stores = useSelector(selectAllStores)
 
@@ -80,7 +80,7 @@ function Items({navigation, route, handleDoneClick}) {
    
     const addToShoppingList = async (item) => {
       try {
-        const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, isItem: false, isList: true, isDone: false, storeName: editStore ? editStore.name : null}
+        const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, isItem: false, isList: true, isDone: false, storeName: thisStore ? thisStore.name : null}
         dispatch(updateItem(editItem))
         const updatedItems = items.map(item=>item.id === editItem.id ? editItem : item)
         
@@ -95,7 +95,7 @@ function Items({navigation, route, handleDoneClick}) {
     }
     const handleDone = () => {
       router.push("/list")
-      router.back() 
+      // router.back() 
     }
 
     const returnStore = async (store) => {
@@ -116,7 +116,7 @@ function Items({navigation, route, handleDoneClick}) {
     const returnItems = async () => {
       try {
         // console.log(items, 'items in return items')
-         const renewItems = items.filter(item => item.storeName === editStore.name)
+         const renewItems = items.filter(item => item.storeName === thisStore.name)
          renewItems.map(async (item) => {
           const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, storeName: null, isItem: true, isList: false, isDone: false }
           dispatch(updateItem(editItem))
@@ -144,7 +144,7 @@ function Items({navigation, route, handleDoneClick}) {
     return (
      
        <View style={styles.body}>
-        {!editStore && (
+        {!aStore.length>0 && (
            <Text style={styles.totalItems}>Total Items: {items.length}</Text>
         )}
        
@@ -165,12 +165,12 @@ function Items({navigation, route, handleDoneClick}) {
             </View>
             </View>
           </Modal>
-          {editStore && (
+          {aStore.length>0 && (
            <View>
            <View style={styles.bothButtons}> 
             <TouchableOpacity style={styles.doneTouchable} onPress={()=>handleDone()}><Text style={styles.done}> Done </Text></TouchableOpacity>
             </View>
-            <View style={styles.createShoppingListHeader}><Text style={styles.createShoppingList}>Choose Items For {editStore.name}</Text></View>
+            <View style={styles.createShoppingListHeader}><Text style={styles.createShoppingList}>Choose Items For {thisStore.name}</Text></View>
             </View>
           )}
          {hasItems && !hasVisibleItems ? (
@@ -183,7 +183,7 @@ function Items({navigation, route, handleDoneClick}) {
               
                 <View >
                
-                {editStore ? (
+                {thisStore ? (
                   <View style={styles.storeListContainer}>
                   <Text style={styles.title} numberOfLines={1}>{item.item}</Text>
                   {/* <Text style={styles.subtitle} numberOfLines={1}> {item.desc}</Text> */}
@@ -265,7 +265,7 @@ function Items({navigation, route, handleDoneClick}) {
           style={styles.logo}
           source={require('../../assets/list.png')}
         />
-        {editStore && newItems.length === 0? (
+        {aStore.length>0 && newItems.length === 0? (
           <View>
             <Text>PLEASE CREATE AN ITEMS LIST</Text>
           </View>
