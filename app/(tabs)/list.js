@@ -78,6 +78,7 @@ function List({navigation}) {
   
   const addToItemList = async (item) => {
     try {
+      console.log('IN ADD TO ITME LIST')
       const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, storeName: null, isItem: true, isList: false, isDone: false}
       dispatch(updateItem(editItem))
       const updatedItems = items.map(item=>item.id === editItem.id ? editItem : item)
@@ -250,6 +251,7 @@ const toggleShowMenu = (id) => {
     );
   }
 };
+// console.log(items, 'items line 254 in LIst component')
 
 const updateList = (editStore) => {
   // console.log(editStore, 'Item in update list')

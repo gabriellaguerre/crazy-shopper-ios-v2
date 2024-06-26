@@ -5,34 +5,46 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllItems, addItem, deleteAllItems, updateItem, deleteItem } from '../../redux/itemsSlice';
 import { updateStore, selectAllStores } from '../../redux/storesSlice';
+import { resetStoreParams } from '../../redux/paramsSlice'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function Items({navigation, route, handleDoneClick}) {
 
+  const dispatch = useDispatch()
   const router = useRouter()
   const params = useLocalSearchParams()
-  const { editStore } = params
  
-  const thisStore = params ? params : 0
-  const aStore = Object.values(thisStore)
+ 
+  // let thisStore = params
+  // let aStore = Object.values(thisStore)
+  // console.log(thisStore, 'thisStore')
+  console.log(params, 'params')
   
   const items = useSelector(selectAllItems)
   const stores = useSelector(selectAllStores)
 
-  const dispatch = useDispatch()
+  
   const [modalVisible, setModalVisible] = useState(false)
   const [thisId, setThisId] = useState('')
   const [thisItem, setThisItem] = useState('')
   const [showMenu, setShowMenu] = useState({})
+  const [thisStore, setThisStore] = useState({})
   
-  
+  console.log(thisStore, 'thiStore')
 
- 
+  useEffect(() => {
+    if(Object.keys(params).length> 0){
+      setThisStore(params);
+    }
+     // Update thisStore whenever params change
+  }, []);
+  
   useEffect(()=>{
       dispatch(deleteAllItems());
       getList()
+      setThisStore({});
     },[])
 
     const getList = async () => {
@@ -94,8 +106,8 @@ function Items({navigation, route, handleDoneClick}) {
        
     }
     const handleDone = () => {
+      setThisStore({})
       router.push("/list")
-      // router.back() 
     }
 
     const returnStore = async (store) => {
@@ -140,11 +152,11 @@ function Items({navigation, route, handleDoneClick}) {
     const hasItems = items.length > 0;
     const hasVisibleItems = newItems.length > 0;
 
-
+    
     return (
      
        <View style={styles.body}>
-        {!aStore.length>0 && (
+        {!Object.values(thisStore).length>0 && (
            <Text style={styles.totalItems}>Total Items: {items.length}</Text>
         )}
        
@@ -165,7 +177,7 @@ function Items({navigation, route, handleDoneClick}) {
             </View>
             </View>
           </Modal>
-          {aStore.length>0 && (
+          {Object.values(thisStore).length>0 && (
            <View>
            <View style={styles.bothButtons}> 
             <TouchableOpacity style={styles.doneTouchable} onPress={()=>handleDone()}><Text style={styles.done}> Done </Text></TouchableOpacity>
@@ -183,7 +195,7 @@ function Items({navigation, route, handleDoneClick}) {
               
                 <View >
                
-                {thisStore ? (
+                {Object.values(thisStore).length>0 ? (
                   <View style={styles.storeListContainer}>
                   <Text style={styles.title} numberOfLines={1}>{item.item}</Text>
                   {/* <Text style={styles.subtitle} numberOfLines={1}> {item.desc}</Text> */}
@@ -265,7 +277,7 @@ function Items({navigation, route, handleDoneClick}) {
           style={styles.logo}
           source={require('../../assets/list.png')}
         />
-        {aStore.length>0 && newItems.length === 0? (
+        {Object.values(thisStore).length>0 && newItems.length === 0? (
           <View>
             <Text>PLEASE CREATE AN ITEMS LIST</Text>
           </View>
