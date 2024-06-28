@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useGlobalSearchParams, useRouter } from 'expo-router';
 import { Modal, StyleSheet, Text, TouchableOpacity, View, Button, Alert, FlatList, Image, Pressable} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,13 +14,13 @@ function Items({navigation, route, handleDoneClick}) {
 
   const dispatch = useDispatch()
   const router = useRouter()
-  const params = useLocalSearchParams()
+  const params = useGlobalSearchParams()
+//  const [params, setParams] = useState(useLocalSearchParams())
  
- 
-  // let thisStore = params
+  let thisStore = params
   // let aStore = Object.values(thisStore)
   // console.log(thisStore, 'thisStore')
-  console.log(params, 'params')
+
   
   const items = useSelector(selectAllItems)
   const stores = useSelector(selectAllStores)
@@ -30,21 +30,23 @@ function Items({navigation, route, handleDoneClick}) {
   const [thisId, setThisId] = useState('')
   const [thisItem, setThisItem] = useState('')
   const [showMenu, setShowMenu] = useState({})
-  const [thisStore, setThisStore] = useState({})
   
-  console.log(thisStore, 'thiStore')
+  
+  // console.log(thisStore, 'thiStore')
+  console.log(params, 'params')
+  console.log(thisStore, 'This Store')
 
-  useEffect(() => {
-    if(Object.keys(params).length> 0){
-      setThisStore(params);
-    }
-     // Update thisStore whenever params change
-  }, []);
+  // useEffect(() => {
+  //   if(Object.keys(params).length> 0){
+  //     setThisStore(params);
+  //   }
+  //    // Update thisStore whenever params change
+  // }, []);
   
   useEffect(()=>{
       dispatch(deleteAllItems());
       getList()
-      setThisStore({});
+      // setThisStore({});
     },[])
 
     const getList = async () => {
@@ -106,8 +108,11 @@ function Items({navigation, route, handleDoneClick}) {
        
     }
     const handleDone = () => {
-      setThisStore({})
-      router.push("/list")
+      // setThisStore({})
+      // navigation.setParams({query: null})
+      // thisStore = {}
+      // router.setParams({})
+      router.push("/items")
     }
 
     const returnStore = async (store) => {
@@ -156,7 +161,7 @@ function Items({navigation, route, handleDoneClick}) {
     return (
      
        <View style={styles.body}>
-        {!Object.values(thisStore).length>0 && (
+        {!Object.values(params).length>0 && (
            <Text style={styles.totalItems}>Total Items: {items.length}</Text>
         )}
        
@@ -177,12 +182,12 @@ function Items({navigation, route, handleDoneClick}) {
             </View>
             </View>
           </Modal>
-          {Object.values(thisStore).length>0 && (
+          {Object.values(params).length>0 && (
            <View>
            <View style={styles.bothButtons}> 
             <TouchableOpacity style={styles.doneTouchable} onPress={()=>handleDone()}><Text style={styles.done}> Done </Text></TouchableOpacity>
             </View>
-            <View style={styles.createShoppingListHeader}><Text style={styles.createShoppingList}>Choose Items For {thisStore.name}</Text></View>
+            <View style={styles.createShoppingListHeader}><Text style={styles.createShoppingList}>Choose Items For {params.name}</Text></View>
             </View>
           )}
          {hasItems && !hasVisibleItems ? (
@@ -195,7 +200,7 @@ function Items({navigation, route, handleDoneClick}) {
               
                 <View >
                
-                {Object.values(thisStore).length>0 ? (
+                {Object.values(params).length>0 ? (
                   <View style={styles.storeListContainer}>
                   <Text style={styles.title} numberOfLines={1}>{item.item}</Text>
                   {/* <Text style={styles.subtitle} numberOfLines={1}> {item.desc}</Text> */}
@@ -277,7 +282,7 @@ function Items({navigation, route, handleDoneClick}) {
           style={styles.logo}
           source={require('../../assets/list.png')}
         />
-        {Object.values(thisStore).length>0 && newItems.length === 0? (
+        {Object.values(params).length>0 && newItems.length === 0? (
           <View>
             <Text>PLEASE CREATE AN ITEMS LIST</Text>
           </View>
