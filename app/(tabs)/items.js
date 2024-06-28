@@ -112,7 +112,7 @@ function Items({navigation, route, handleDoneClick}) {
       // navigation.setParams({query: null})
       // thisStore = {}
       // router.setParams({})
-      router.push("/items")
+      router.push("/list")
     }
 
     const returnStore = async (store) => {
@@ -185,7 +185,7 @@ function Items({navigation, route, handleDoneClick}) {
           {Object.values(params).length>0 && (
            <View>
            <View style={styles.bothButtons}> 
-            <TouchableOpacity style={styles.doneTouchable} onPress={()=>handleDone()}><Text style={styles.done}> Done </Text></TouchableOpacity>
+            <TouchableOpacity style={styles.doneTouchable} onPress={()=>{router.push("/items"); handleDone()}}><Text style={styles.done}> Done </Text></TouchableOpacity>
             </View>
             <View style={styles.createShoppingListHeader}><Text style={styles.createShoppingList}>Choose Items For {params.name}</Text></View>
             </View>
