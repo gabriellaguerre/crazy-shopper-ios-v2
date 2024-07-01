@@ -14,23 +14,26 @@ function AddStoreForm({navigation, route}) {
   const router = useRouter()
   const params = useLocalSearchParams()
 
-  const {store: thisStore} = params ? params : 0
- 
+  // const {store: thisStore} = params ? params : 0
+  console.log(params, 'params in addstoreform')
+  // let thisStore = params
+
+
   const stores = useSelector(selectAllStores)
   const dispatch = useDispatch()
  
-  const [name, setName] = useState(thisStore ? thisStore.name : '')
-  const [description, setDescription] = useState(thisStore ? thisStore.description : '')
-  const [isStore, setIsStore] = useState(thisStore ? thisStore.isStore : true)
+  const [name, setName] = useState(params ? params.name: '')
+  const [description, setDescription] = useState(params ? params.description: '')
+  const [isStore, setIsStore] = useState(true)
 
-  useEffect(()=>{
-    if(thisStore) {
-      setName(thisStore.name);
-      setDescription(thisStore.description);
-      // setPrice(thisitem.price);
-      // setStore(thisitem.store)
-    }
-  },[thisStore])
+  // useEffect(()=>{
+  //   if(Object.values(params).length>0) {
+  //     setName(params.name);
+  //     setDescription(params.description);
+  //     // setPrice(thisitem.price);
+  //     // setStore(thisitem.store)
+  //   }
+  // },[params])
 
   const createStore = async () => {
     try {
@@ -66,7 +69,7 @@ function AddStoreForm({navigation, route}) {
   const editStore = async () => {
     try {
         if(name) {
-          const editStore = {id: thisStore.id, name: name.toUpperCase(), description, isStore}
+          const editStore = {id: params.id, name: name.toUpperCase(), description, isStore}
           dispatch(updateStore(editStore))
           router.back()
           Alert.alert('Success', `Successfully edited ${name.toUpperCase()}`)
@@ -119,7 +122,7 @@ function AddStoreForm({navigation, route}) {
             /> */}
 
         <View>
-          {!thisStore ? (
+          {!Object.values(params).length>0 ? (
           <TouchableOpacity style={styles.addButton} onPress={createStore}>
               <Text style={styles.addText}>+ Add To Stores List</Text>
            </TouchableOpacity >

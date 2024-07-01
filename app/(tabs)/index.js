@@ -106,7 +106,8 @@ function Stores({navigation}) {
     }
  
     const navigateToAddStoreForm = (store) => {
-      navigation.navigate('Store', { store })
+      router.push({pathname: "/AddStoreForm", params: store})
+      // navigation.navigate('Store', { store })
     }
 
    
