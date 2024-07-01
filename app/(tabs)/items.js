@@ -17,7 +17,7 @@ function Items({navigation, route, handleDoneClick}) {
   const params = useGlobalSearchParams()
 //  const [params, setParams] = useState(useLocalSearchParams())
  
-  let thisStore = params
+  // let thisStore = params
   // let aStore = Object.values(thisStore)
   // console.log(thisStore, 'thisStore')
 
@@ -31,18 +31,7 @@ function Items({navigation, route, handleDoneClick}) {
   const [thisItem, setThisItem] = useState('')
   const [showMenu, setShowMenu] = useState({})
   
-  
-  // console.log(thisStore, 'thiStore')
-  console.log(params, 'params')
-  console.log(thisStore, 'This Store')
-
-  // useEffect(() => {
-  //   if(Object.keys(params).length> 0){
-  //     setThisStore(params);
-  //   }
-  //    // Update thisStore whenever params change
-  // }, []);
-  
+    
   useEffect(()=>{
       dispatch(deleteAllItems());
       getList()
@@ -94,7 +83,7 @@ function Items({navigation, route, handleDoneClick}) {
    
     const addToShoppingList = async (item) => {
       try {
-        const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, isItem: false, isList: true, isDone: false, storeName: thisStore ? thisStore.name : null}
+        const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, isItem: false, isList: true, isDone: false, storeName: params ? params.name : null}
         dispatch(updateItem(editItem))
         const updatedItems = items.map(item=>item.id === editItem.id ? editItem : item)
         

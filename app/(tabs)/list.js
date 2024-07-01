@@ -78,7 +78,7 @@ function List({navigation}) {
   
   const addToItemList = async (item) => {
     try {
-      console.log('IN ADD TO ITME LIST')
+      // console.log('IN ADD TO ITME LIST')
       const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, storeName: null, isItem: true, isList: false, isDone: false}
       dispatch(updateItem(editItem))
       const updatedItems = items.map(item=>item.id === editItem.id ? editItem : item)
@@ -139,10 +139,10 @@ const toggleShowMenu = (id) => {
   setShowMenu(prevState => ({ ...prevState, [id]: !prevState[id] }));
 }
   
-  const newItems = items.filter(item=> item.isList === true && item.storeName === null)
+  const newItems = items.filter(item=> item.isList === true && (item.storeName === undefined || item.storeName === null))
                         .sort((a, b) => a.item.localeCompare(b.item))
 
-
+  
 
   const newStores = stores.filter(store => store.isStore === false).sort((a,b)=> a.name.localeCompare(b.name))
 
