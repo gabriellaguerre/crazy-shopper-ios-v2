@@ -7,13 +7,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "crazyshopper",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.opogy.crazyshopper"
     },
     "android": {
