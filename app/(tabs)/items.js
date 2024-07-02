@@ -77,7 +77,8 @@ function Items({navigation, route, handleDoneClick}) {
     }
  
     const navigateToAddItemForm = (item) => {
-      navigation.navigate('Item', { item })
+      router.push({pathname: "/AddItemForm", params: item})
+      // navigation.navigate('Item', { item })
     }
 
    
@@ -141,12 +142,12 @@ function Items({navigation, route, handleDoneClick}) {
       setShowMenu(prevState => ({ ...prevState, [id]: !prevState[id] }));
     }
 
-    const newItems = items.filter(item=> item.isItem === true).sort((a, b) => a.item.localeCompare(b.item));
+    const newItems = items.filter(item=> item.isItem === true || item.isItem === "true" || item.isItem === undefined).sort((a, b) => a.item.localeCompare(b.item));
     
     const hasItems = items.length > 0;
     const hasVisibleItems = newItems.length > 0;
 
-    
+   
     return (
      
        <View style={styles.body}>

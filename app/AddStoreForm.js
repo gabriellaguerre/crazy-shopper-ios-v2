@@ -15,7 +15,7 @@ function AddStoreForm({navigation, route}) {
   const params = useLocalSearchParams()
 
   // const {store: thisStore} = params ? params : 0
-  console.log(params, 'params in addstoreform')
+  // console.log(params, 'params in addstoreform')
   // let thisStore = params
 
 

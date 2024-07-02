@@ -18,25 +18,29 @@ function AddItemForm({navigation, route}) {
   const items = useSelector(selectAllItems)
   const dispatch = useDispatch()
 
-  const [itemName, setItemName] = useState(thisitem ? thisitem.item : '')
-  const [desc, setDesc] = useState(thisitem ? thisitem.desc : '')
+  const [itemName, setItemName] = useState(params ? params.item : '')
+  const [desc, setDesc] = useState(params ? params.desc : '')
   // const [price, setPrice] = useState(thisitem ? thisitem.price : 0)
   // const [store, setStore] = useState(thisitem ? thisitem.store : '')
-  const [isItem, setIsItem] = useState(thisitem ? thisitem.isItem : true)
-  const [isList, setIsList] = useState(thisitem ? thisitem.isList : false)
-  const [isDone, setIsDone] = useState(thisitem ? thisitem.isDone : false)
-  const [storeName, setStoreName] = useState(thisitem ? thisitem.storeName : null)
+  const [isItem, setIsItem] = useState(params ? params.isItem : true)
+  const [isList, setIsList] = useState(params ? params.isList : false)
+  const [isDone, setIsDone] = useState(params ? params.isDone : false)
+  const [storeName, setStoreName] = useState(params ? params.storeName : null)
 
-  useEffect(()=>{
-    if(thisitem) {
-      setItemName(thisitem.item);
-      setDesc(thisitem.desc);
-      // setPrice(thisitem.price);
-      // setStore(thisitem.store)
-    }
-  },[thisitem])
+  // console.log(params, 'params in Add Item Form')
+  // console.log(thisitem, 'thisitem in add item form')
+
+  // useEffect(()=>{
+  //   if(thisitem) {
+  //     setItemName(thisitem.item);
+  //     setDesc(thisitem.desc);
+  //     // setPrice(thisitem.price);
+  //     // setStore(thisitem.store)
+  //   }
+  // },[thisitem])
 
   const createItem = async () => {
+   
     try {
       // console.log(itemName, 'itemName')
       if(itemName) {
@@ -45,7 +49,8 @@ function AddItemForm({navigation, route}) {
         if(itemExist) {
           Alert.alert('Warning', `${itemName} is already in your list`)
         } else {
-        const newItem = {id: nanoid(), item: itemName, desc: desc, storeName: null, isItem: isItem, isList: isList, isDone: isDone}
+        const newItem = {id: nanoid(), item: itemName, desc: desc, storeName: null, isItem: true, isList: false, isDone: false}
+      
         dispatch(addItem(newItem))
         Alert.alert('Success', `Successfully added ${itemName}`)
         setItemName('')
@@ -72,8 +77,9 @@ function AddItemForm({navigation, route}) {
 
   const editItem = async () => {
     try {
+      console.log(itemName, 'item name in edit item')
         if(itemName) {
-          const editItem = {id: thisitem.id, item: itemName, desc, storeName, isItem, isList, isDone}
+          const editItem = {id: params.id, item: itemName, desc, storeName, isItem, isList, isDone}
           dispatch(updateItem(editItem))
           router.back()
           Alert.alert('Success', `Successfully edited ${itemName}`)

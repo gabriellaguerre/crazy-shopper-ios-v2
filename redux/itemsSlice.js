@@ -20,7 +20,6 @@ const itemsSlice = createSlice({
                         existingItem.isList = isList
                         existingItem.isDone = isDone
                         existingItem.storeName = storeName
-
                 }
 
         },
