@@ -9,7 +9,7 @@ import { Stack } from 'expo-router/stack'
 
 export default function RootLayout() {
   
- 
+ console.log("IN ROOTLAYOUT")
   const [isSplash, setIsSplash] = useState(true);
 
   useEffect(() => {
