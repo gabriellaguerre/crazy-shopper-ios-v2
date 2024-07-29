@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Crazy Shopper",
-    "slug": "Crazy Shopper",
+    "name": "crazy-shopper",
+    "slug": "crazy-shopper",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
