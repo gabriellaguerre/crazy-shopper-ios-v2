@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "crazy-shopper",
-    "slug": "crazy-shopper",
+    "name": "Crazy Shopper",
+    "slug": "Crazy Shopper",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,8 @@
     "ios": {
       "supportsTablet": true,
       "icon": "./assets/images/icon.png",
-      "bundleIdentifier": "com.opogy.crazyshopper"
+      "bundleIdentifier": "com.opogy.crazyshopper",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
