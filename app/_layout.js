@@ -9,24 +9,27 @@ import { Stack } from 'expo-router/stack'
 
 export default function RootLayout() {
   
- console.log("IN ROOTLAYOUT")
+//  console.log("IN ROOTLAYOUT")
   const [isSplash, setIsSplash] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer =  setTimeout(() => {
       setIsSplash(false);
     }, 2500);
+
+    return () => clearTimeout(timer);
   }, []);
 
+
+
   if(isSplash) {
-   
       return <Splash />
   }
 
  
   return  (
     <Provider store={store}>
-  
+
      <Stack>
       <Stack.Screen name="(tabs)" options={{headerShown: false, }}/>
     
@@ -47,6 +50,7 @@ export default function RootLayout() {
                                                     fontSize: 25,
                                                     }}}/>
      </Stack>
+  
     </Provider>
   )
 }

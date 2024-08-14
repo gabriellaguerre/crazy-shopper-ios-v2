@@ -25,7 +25,7 @@ export default function TabLayout() {
           if (route.name === 'items') {
             iconName = 'list';
             size = focused ? 30 : 25;
-          } else if (route.name === 'index') {
+          } else if (route.name === 'stores') {
             iconName = 'store';
             size = focused ? 30 : 25;
           } else if (route.name === 'list') {
@@ -39,7 +39,7 @@ export default function TabLayout() {
       })}
     >
       <Tabs.Screen
-        name="index"
+        name="stores"
         
         // component={StoresNavigator}
         options={{
