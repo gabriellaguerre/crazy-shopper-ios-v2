@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import Splash from './Splash';
 import { View, Text } from 'react-native';
-// import App from '../App'
+
 import { Stack } from 'expo-router/stack'
 
 

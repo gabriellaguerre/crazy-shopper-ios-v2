@@ -4,9 +4,7 @@ import {Tabs} from 'expo-router';
 import { useSelector } from 'react-redux';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-// import ItemsNavigator from './items';
-// import ListNavigator from './list';
-// import StoresNavigator from './stores';
+
 import { selectAllItems } from '../../redux/itemsSlice';
 
 
@@ -14,7 +12,7 @@ import { selectAllItems } from '../../redux/itemsSlice';
 
 
 export default function TabLayout() {
-  
+ 
   const router = useRouter()
 
   return (
@@ -25,7 +23,7 @@ export default function TabLayout() {
           if (route.name === 'items') {
             iconName = 'list';
             size = focused ? 30 : 25;
-          } else if (route.name === 'stores') {
+          } else if (route.name === 'index') {
             iconName = 'store';
             size = focused ? 30 : 25;
           } else if (route.name === 'list') {
@@ -39,7 +37,7 @@ export default function TabLayout() {
       })}
     >
       <Tabs.Screen
-        name="stores"
+        name="index"
         
         // component={StoresNavigator}
         options={{
