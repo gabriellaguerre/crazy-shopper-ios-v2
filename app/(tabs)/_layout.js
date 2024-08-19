@@ -23,10 +23,10 @@ export default function TabLayout() {
           if (route.name === 'items') {
             iconName = 'list';
             size = focused ? 30 : 25;
-          } else if (route.name === 'index') {
+          } else if (route.name === 'stores') {
             iconName = 'store';
             size = focused ? 30 : 25;
-          } else if (route.name === 'list') {
+          } else if (route.name === 'index') {
             iconName = 'cart-arrow-down';
             size = focused ? 30 : 25;
           }
@@ -36,8 +36,23 @@ export default function TabLayout() {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tabs.Screen
+     <Tabs.Screen
         name="index"
+        // component={ListNavigator}
+        options={{
+          title: 'List',
+          headerTitleAlign: 'center',
+          headerStyle: {backgroundColor: '#C0C0C0'},
+          headerTintColor: '#696969',
+          headerTitleStyle: {fontWeight: 'bold', fontSize: 25},
+          tabBarLabelStyle: {fontSize: 15}, 
+          tabBarBadge: useSelector(selectAllItems).filter(item => item.isList === true).length || null,
+          tabBarLabelStyle: { fontSize: 15 },
+        }}
+      />
+
+      <Tabs.Screen
+        name="stores"
         
         // component={StoresNavigator}
         options={{
@@ -52,20 +67,7 @@ export default function TabLayout() {
           tabBarLabelStyle: { fontSize: 15 },
         }}
       />
-      <Tabs.Screen
-        name="list"
-        // component={ListNavigator}
-        options={{
-          title: 'List',
-          headerTitleAlign: 'center',
-          headerStyle: {backgroundColor: '#C0C0C0'},
-          headerTintColor: '#696969',
-          headerTitleStyle: {fontWeight: 'bold', fontSize: 25},
-          tabBarLabelStyle: {fontSize: 15}, 
-          tabBarBadge: useSelector(selectAllItems).filter(item => item.isList === true).length || null,
-          tabBarLabelStyle: { fontSize: 15 },
-        }}
-      />
+     
       <Tabs.Screen
         name="items"
         // component={ItemsNavigator}

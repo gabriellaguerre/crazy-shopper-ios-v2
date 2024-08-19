@@ -1,465 +1,443 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { selectAllItems, addItem, updateItem, deleteAllItems } from '../../redux/itemsSlice';
+import { selectAllStores, addStore, updateStore, deleteAllStores } from '../../redux/storesSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'expo-router'
-
-import { Modal, StyleSheet, Text, TouchableOpacity, View, Button, Alert, FlatList, Image, Pressable, SafeAreaView} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectAllItems, addItem } from '../../redux/itemsSlice';
-import { selectAllStores, addStore, updateStore, deleteStore, deleteAllStores } from '../../redux/storesSlice';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
-function Stores({navigation}) {
-  const router = useRouter()
-  
-  const stores = useSelector(selectAllStores)
+function List({navigation}) {
   const items = useSelector(selectAllItems)
-
+  const stores = useSelector(selectAllStores)
   const dispatch = useDispatch()
-  
-  const [modalVisible, setModalVisible] = useState(false)
-  const [editModalVisible, setEditModalVisible] = useState(false)
-  const [thisStoreId, setThisStoreId] = useState('')
-  const [thisStore, setThisStore] = useState('')
-  const [editThisStore, setEditThisStore] = useState({})
-  const [thisStoreDesc, setThisStoreDesc] = useState('')
+  const router = useRouter()
 
-  // console.log(stores, 'sssssssssssss')
+  const [showMenu, setShowMenu] = useState({})
+  
   useEffect(()=>{
-      dispatch(deleteAllStores());
-      getStores()
-      getList()
-    },[])
-
-    // useEffect(()=> {
-    //   if(resetStack) {
-    //     navigation.dispatch(CommonActions.reset({
-    //       index: 0,
-    //       routes: [{name: 'Stores List'}]
-    //     })
-    //   )
-    //   setResetStack(false)
-    //   }
-
-    // },[resetStack, navigation])
-
-    const getStores = async () => {
-      try {
-         const jsonValue = await AsyncStorage.getItem('Stores')
-         if(jsonValue !== null){  
-          const storesArray = JSON.parse(jsonValue)
-        
-          if(Array.isArray(storesArray)){
-            storesArray.forEach(obj => {
-          const thisStore = { id: obj.id, name: obj.name, description: obj.description, isStore: obj.isStore };
-          dispatch(addStore(thisStore));
-          });
-          } else {
-            console.error("Error loading items: Invalid data format")
-          }
-          
-         }
-      } catch (error) {
-        console.error('Error loading items:', error)
-        
-      }
+    dispatch(deleteAllStores());
+    dispatch(deleteAllItems());
+    getList()
+    getStores()
+  },[])
   
-    }
- 
-    const getList = async () => {
-      try {
-         const jsonValue = await AsyncStorage.getItem('Items')
-         if(jsonValue !== null){
-          const itemsArray = JSON.parse(jsonValue)
-        
-          if(Array.isArray(itemsArray)){
-            itemsArray.forEach(obj => {
-          const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
-          dispatch(addItem(thisItem));
-          });
-          } else {
-            console.error("Error loading items: Invalid data format")
-          }
-          
-         }
-      } catch (error) {
-        console.error('Error loading items:', error)
-        
-      }
+  useEffect(() => {
+    const initialShowMenu = stores.reduce((acc, store) => {
+      acc[store.id] = true;
+      return acc;
+    }, {});
+    setShowMenu(initialShowMenu);
+  }, [stores]);
   
-    }
- 
-    const removeStore = async (id) => {
-      try {
-        // console.log(id, 'iiiiiiiiiiiiiii')
-        dispatch(deleteStore(id))
-        
-        const newStoreList = stores.filter(store => store.id !== id)
+
+  const getStores = async () => {
+    try {
+       const jsonValue = await AsyncStorage.getItem('Stores')
+       if(jsonValue !== null){
+        const storesArray = JSON.parse(jsonValue)
       
-        const jsonStoreValue = JSON.stringify(newStoreList)
-        await AsyncStorage.setItem('Stores', jsonStoreValue)     
-      } catch (error) {
-        console.log(error)
-      }
-     
-    }
- 
-    const navigateToAddStoreForm = (store) => {
-      router.push({pathname: "/AddStoreForm", params: store})
-      // navigation.navigate('Store', { store })
+        if(Array.isArray(storesArray)){
+          storesArray.forEach(obj => {
+        const thisStore = { id: obj.id, name: obj.name, description: obj.description, isStore: obj.isStore };
+        dispatch(addStore(thisStore));
+        });
+        } else {
+          console.error("Error loading items: Invalid data format")
+        }
+        
+       }
+    } catch (error) {
+      console.error('Error loading items:', error)
+      
     }
 
-   
-    const createShoppingList = async (store) => {
-      if(items.length > 0) {
-      try {
-        const editStore = {id: store.id, name: store.name, description: store.description, isStore:false }
-        dispatch(updateStore(editStore))
-        const updatedStores = stores.map(store => store.id === editStore.id ? editStore : store)
-        
-        const jsonStoreValue = JSON.stringify(updatedStores)
-        await AsyncStorage.setItem('Stores', jsonStoreValue)
-        // console.log({ editStore}, 'ooooooooo')
-        // navigation.navigate('Items List',{editStore})
-        router.push({pathname:"/items", params: editStore})
-    
-      } catch (error) {
-        console.log(error)
-      }    
-       
-    } else {
-      Alert.alert('Do This First','You Need to Create An Items List Before Creating a Shopping List')
-    }
   }
-    // filter(store=>store.isStore === true).
-    const newStores = stores.filter(store=> store.isStore === true).sort((a, b) => a.name.localeCompare(b.name));
-    // console.log(newStores, 'nnnnnnnnnnn')
-    const hasStores = stores.length > 0
-    const hasVisibleStores = newStores.length > 0;
-    
-    
-
-    return (
-     
-       <SafeAreaView style={styles.body}>
-        <Modal 
-          // animationType='slide'
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={()=>setModalVisible(!modalVisible)}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                 <Text style={styles.modalText}>Do you want to delete {thisStore}?</Text>
-            <View style={styles.modalButtonsContainer}>
-              <TouchableOpacity style={styles.deleteButton} onPress={()=>{removeStore(thisStoreId);setModalVisible(false)}}>
-              <Text style={styles.deleteText}>Yes, Delete {thisStore}</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.cancelButton} onPress={()=>setModalVisible(!modalVisible)}>
-              <Text style={styles.cancelText}>No, Cancel</Text></TouchableOpacity>
-              </View>
-            </View>
-            </View>
-          </Modal>
-{/*****************************************************************Store Image Modal**************************************************/}
-          <Modal 
-          // animationType='slide'
-          transparent={true}
-          visible={editModalVisible}
-          onRequestClose={()=>setEditModalVisible(!editModalVisible)}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <View style={styles.closeXView}>
-              <TouchableOpacity style={styles.closeModalButton} onPress={()=>{setEditModalVisible(!editModalVisible)}}>
-              <Text style={styles.closeX}>X</Text></TouchableOpacity></View>
-              {thisStoreDesc ? (
-              <View style={styles.storeData}>
-              <Text style={styles.storeName}>{thisStore}</Text>
-              <Text style={styles.storeDesc}>Description: {thisStoreDesc}</Text>
-              </View>
-              ):(
-               <></>
-              )}            
-            <View style={styles.modalButtonsContainer}>
-            <TouchableOpacity style={styles.editModalButton} onPress={()=>{setEditModalVisible(!editModalVisible);navigateToAddStoreForm(editThisStore)}}>
-              <Text style={styles.cancelText}>Edit {thisStore}</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.deleteEditModalButton} onPress={()=>{setEditModalVisible(false);setModalVisible(true)}}>
-              <Text style={styles.deleteText}>Delete {thisStore}</Text></TouchableOpacity>
-              </View>
-            </View>
-            </View>
-          </Modal>
-
-         {hasStores && !hasVisibleStores ? (
-            <View style={styles.blankScreen}/>
-          ):(
-          hasVisibleStores ? (
-          <View style={styles.container}>
-          <FlatList 
-            data={newStores}
-            numColumns={2} // Set the number of columns to 2
-            renderItem={({ item: store }) => (
-                <View style={styles.listContainer}>
-                  <TouchableOpacity style={styles.storeButton} onPress={()=>{setEditModalVisible(!editModalVisible); 
-                    setThisStore(store.name); 
-                    setEditThisStore(store);
-                    setThisStoreId(store.id); 
-                    setThisStoreDesc(store.description)
-                  }}
-                    
-                    >
-                   <Image 
-                    style={styles.logo}
-                    source={require('../../assets/store_pic.png')}
-                  /></TouchableOpacity>
-                  <Text style={styles.title} numberOfLines={1} >{store.name}</Text>
-                  <Text style={styles.subtitle} numberOfLines={1} > {store.description}</Text>
-                            
-                  <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={()=>{createShoppingList(store)}}>
-                  {/* <FontAwesome5 name={'cart-plus'} size={25} color={'#32CD32'} /> */}
-                  <Text style={styles.createShoppingList}>Create Shopping List</Text>
-                </TouchableOpacity>
-             
-                </View>
-                </View>                
-            )}
-            keyExtractor={(item, index) => index.toString()}
-           />
-          </View>
-         ):(
-          <View style={styles.imageBody}>
-        <Image 
-          style={styles.logo}
-          source={require('../../assets/store-empty.png')}
-        />
-        <Text>NO STORES ARE ADDED YET</Text>
-        <Text>CLICK ON THE PLUS BUTTON ON TOP OR BELOW</Text>
-        <View style={styles.touchContainer}><TouchableOpacity style={styles.buttonEmpty} onPress = {()=> router.push("/AddStoreForm")}>
-                     <FontAwesome5 name={'plus'} size={20} color={'white'}/>
-                    </TouchableOpacity></View>
-      </View>
-         )
-         )}
-     
-      </SafeAreaView>      
-        
-    )
-}
-const styles = StyleSheet.create({
-    body: {
-      // marginTop: 20,
-      flex: 1,
-      backgroundColor: '#C0C0C0',
-    },
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: '#C0C0C0', 
-    },
-    listContainer: {
-     
-      marginHorizontal: 20,
-      marginTop: 30,
-      width: '40%',
-      margin: 10,
-      alignItems: 'center', 
-      justifyContent: 'center',
-      backgroundColor: 'white',
-      paddingLeft: 10,
-      paddingRight: 10,
-      borderRadius: 20,
-      elevation: 5,
-    },
-    /*****Store Button */  
-    storeButton: {
-      backgroundColor: '#DDDDDD',
-      borderRadius: 80,
-      marginTop: 5,
-      alignItems: 'center',
-      elevation: 5,
-    },
-/*****Add Item Round Blue Button */    
-    button: {
-      width: 60,
-      height: 60,
-      borderRadius: 30,
-      backgroundColor: 'blue',
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'absolute',
-      // bottom: 55,
-      right: 10,
-      elevation: 5,
-      top: 10,
-    }, 
-    buttonsContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginTop: 10,
-      marginBottom: 10,
-      backgroundColor: '#6497b1',
-      borderRadius: 5,
-      elevation: 5,
+  const getList = async () => {
+    try {
+       const jsonValue = await AsyncStorage.getItem('Items')
+       if(jsonValue !== null){
+        const itemsArray = JSON.parse(jsonValue)
       
-    },
-    title: {
-      color: 'black',
-      fontSize: 20,
-      alignSelf: 'center',
-      marginTop: 10,
-    },
-    subtitle: {
-      color: 'gray',
-      fontSize: 10,
-    },
-    createShoppingList: {
-      textAlign: 'center',
-      color: 'white',
-      fontWeight: 'bold',
-      // marginLeft: 5,
-      // marginRight: 5,
-      // marginBottom: 5,
-      margin: 5,
-    },
+        if(Array.isArray(itemsArray)){
+          itemsArray.forEach(obj => {
+        const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
+        dispatch(addItem(thisItem));
+        });
+        } else {
+          console.error("Error loading items: Invalid data format")
+        }
+        
+       }
+    } catch (error) {
+      console.error('Error loading items:', error)
+      
+    }
+
+  }
+
+  
+  const addToItemList = async (item) => {
+    try {
+      // console.log('IN ADD TO ITME LIST')
+      const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, storeName: null, isItem: true, isList: false, isDone: false}
+      dispatch(updateItem(editItem))
+      const updatedItems = items.map(item=>item.id === editItem.id ? editItem : item)
+      const jsonItemValue = JSON.stringify(updatedItems)
+      await AsyncStorage.setItem('Items', jsonItemValue)
+
+  } catch (error) {
+    console.log(error)
+  }    
    
-/**********When List is Empty*******/
-    empty: {
-      flex: 1,
-      alignItems:'center',
-      justifyContent: 'center'
+}
+const returnItem = async (item) => {
+  try {
+    const editItem = {id: item.id, item: item.item, desc: item.desc, price: item.price, isItem: true, isList: false, isDone: false, storeName: null}
+    dispatch(updateItem(editItem))
+    const updatedItems = items.map(item=>item.id === editItem.id ? editItem : item)
+    const jsonItemValue = JSON.stringify(updatedItems)
+    await AsyncStorage.setItem('Items', jsonItemValue)
+
+} catch (error) {
+  console.log(error)
+}    
+ 
+}
+
+
+const returnStore = async (storeName) => {
+  try {
+      // console.log(storeName, 'nnn')
+      // console.log(stores, 'sss')
+      const findStore = stores.find(store => store.name === storeName)
+      // console.log(findStore, 'FInd Store')
+      // console.log(findStore.id,' id')
+      const editStore = {id: findStore.id, name: findStore.name, description: findStore.description, isStore: true}
+      // console.log(editStore, 'Edited Store')
+
+       dispatch(updateStore(editStore))
+      
+       const updatedStores = stores.map(store=>store.id === editStore.id ? editStore : store)
+      //  console.log(updatedStores, 'Udpated Store')
+
+       const jsonStoreValue = JSON.stringify(updatedStores)
+      //  console.log(jsonStoreValue, 'JSON Store Value')
+
+       await AsyncStorage.setItem('Stores', jsonStoreValue)
+      //  console.log('Store updated in AsycStorage ')
+
+      //  navigation.navigate('Stores')
+    
+
+} catch (error) {
+  console.log(error)
+}    
+ 
+}
+
+const toggleShowMenu = (id) => {
+  setShowMenu(prevState => ({ ...prevState, [id]: !prevState[id] }));
+}
+  
+  const newItems = items.filter(item=> item.isList === true && (item.storeName === undefined || item.storeName === null))
+                        .sort((a, b) => a.item.localeCompare(b.item))
+
+  
+
+  const newStores = stores.filter(store => store.isStore === false).sort((a,b)=> a.name.localeCompare(b.name))
+
+  const combinedData = [
+    ...newStores.map((store) => ({ ...store, type: 'store' })),
+    ...newItems.map((item) => ({ ...item, type: 'item' })),
+  ];
+  
+  const storeItems = (storeName) => {
+  //  console.log(item, 'item in storeItem')
+  
+    const filteredItems = items.filter(item => item.isList && item.storeName === storeName);
+    // showPlus = filteredItems.length === 0;
+    // if(filteredItems.length > 0) {
+    //   setShowPlus(true)
+    // }
+   
+
+    if (filteredItems.length === 0) {
+     
+    
+        return  (
+      <View style={styles.returnAndPlus}>
+      <TouchableOpacity style={styles.returnStoreButton} onPress={()=>{returnStore(storeName)}}>
+          <FontAwesome5 name={'arrow-left'} size={25} color={'#094a85'} />
+          <Text style={styles.returnStore}>Return Store</Text>
+      </TouchableOpacity>
+      {/* <TouchableOpacity style={styles.buttonItem} onPress={()=>updateList(item)} >
+             <FontAwesome5 name={'plus'} size={20} color={'#094a85'}/>
+        </TouchableOpacity> */}
+
+    </View> // or any other message or component
+      )
+    }
+   
+    return filteredItems
+                .sort((a, b) => a.item.localeCompare(b.item))
+                .map((item, index) => (
+                  <View key={item.id}>
+                  <View style={styles.storeListContainer}>
+                  <Text style={styles.storeListContainerTitle} numberOfLines={1}>{item.item}</Text>
+      
+             <TouchableOpacity onPress={()=>{ addToItemList(item); }}>
+             <Image 
+                style={styles.addToCart}
+                source={require('../../assets/shopping-cart-and-red-arrow-2026.png')} />
+               {/* <FontAwesome5 name={'check'} size={25} color={'green'} /> */}
+             </TouchableOpacity>
+             </View>
+             {index < filteredItems.length - 1 && <View style={styles.separator} />} 
+             </View>
+                )
+              
+              )
+
+ }
+
+ const renderItem = ({ item }) => {
+ 
+  if (item.type === 'store') {
+    const filteredItems = items.filter(item => item.isList && item.storeName === item.name);
+  
+    return (
+      <View style={styles.listContainer}>
+        <View style={styles.titleAndPlus}>
+        <Text style={styles.storeTitle} numberOfLines={1}>{item.name}</Text>
+        <TouchableOpacity style={styles.buttonItem} onPress={()=>updateList(item)} >
+             <FontAwesome5 name={'plus'} size={20} color={'#094a85'}/>
+        </TouchableOpacity>
+        </View>
+        <Text style={styles.subtitle} numberOfLines={1}>{item.description}</Text>
+
+        <TouchableOpacity onPress={()=>{toggleShowMenu(item.id)}}>
+           {showMenu[item.id] ? (
+               <Image 
+                 style={styles.arrows}
+                 source={require('../../assets/arro-up-3100.png')}
+                  />
+                  ):(
+            <Image 
+              style={styles.arrows}
+               source={require('../../assets/arrow-down-3101.png')}
+                />
+             )}
+          </TouchableOpacity>
+        {showMenu[item.id] && storeItems(item.name)}
+       
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.listContainer}>
+        <View style={styles.itemCart}>
+        <Text style={styles.itemTitle} numberOfLines={1}>{item.item}</Text>
+        <TouchableOpacity onPress={() => addToItemList(item)}>
+        <Image 
+          style={styles.addToCart} source={require('../../assets/shopping-cart-and-red-arrow-2026.png')} />
+         </TouchableOpacity>
+          </View>
+        {item.desc ? (
+           <Text style={styles.subtitle} numberOfLines={1}>{item.desc}</Text>
+        ):(
+          <></>
+        )}
+      </View>
+    );
+  }
+};
+// console.log(items, 'items line 254 in LIst component')
+
+const updateList = (editStore) => {
+  // console.log(editStore, 'Item in update list')
+  // navigation.navigate('Items List', {editStore})
+  router.push({pathname:"/items", params: editStore})
+}
+ 
+return (
+  <SafeAreaView style={styles.body}>
+    <FlatList data={combinedData} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} />
+  </SafeAreaView>
+);
+  
+}
+
+
+const styles = StyleSheet.create({
+ body: {
+   flex: 1,
+   backgroundColor: '#C0C0C0',
+ },
+ listContainer: {
+   marginHorizontal: 40,
+   width: '90%',
+   margin: 10,
+   alignSelf: 'center',
+   backgroundColor: 'white',
+   paddingLeft: 10,
+   paddingRight: 10,
+   borderRadius: 20,
+   elevation: 5,
+ },
+ storeListContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 10,
+  marginTop: 10,
+ },
+ separator: {
+  height: 1,
+  backgroundColor: 'gray',
+  marginVertical: 10,
+ },
+
+ returnStoreButton: {
+  flexDirection: 'row',
+  marginBottom: 5,
+  color: '#094a85'
+ },
+ returnStore: {
+  color: '#094a85',
+  marginLeft: 10,
+  marginTop: 2,
+  marginBottom: 5,
+ },
+ returnAndPlus: {
+  flexDirection: 'row',
+  justifyContent: 'space-between'
+ },
+ onlyPlus: {
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+ },
+ addToCart: {
+  width: 25,
+  height: 25,
+  // margin: 5,
+},
+storeTitle: {
+  color: 'black',
+  fontSize: 30,
+  marginLeft: 5,
+},
+  arrows: {
+      width: 15,
+      height: 15,
+      margin: 15,
     },
-    emptyText: {
-      color: 'white',
-      fontSize: 40,
-    },
-    logo: {
-      width: 100,
-      height: 100,
-      margin: 20,
-    },
-    imageBody: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    buttonEmpty: {
-      width: 40,
-      height:40,
-      borderRadius: 30,
-      backgroundColor: '#094a85',
-      justifyContent: 'center',
-      alignItems: 'center',
-      margin: 10,
-    },
-/*****************************MODAL******** */
-centeredView: {
-  flex: 1,
+
+titleAndPlus: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  backgroundColor: '#b5cbde',
+  borderRadius: 10,
+  width: '100%',
+  marginTop: 10,
+  elevation: 5,
+  alignItems: 'center',
+},
+
+storeListContainerTitle: {
+ flex: 1,
+ color: 'black',
+ fontSize: 20,
+ 
+},
+
+subtitle: {
+  color: 'gray',
+  fontSize: 15,
+  // marginTop: 5,
+  marginBottom: 10,
+},
+
+itemCart: {
+  flexDirection:'row',
+  justifyContent: 'space-between',
+  marginBottom: 10,
+  marginTop: 10,
+},
+
+itemTitle: {
+ flex: 1,
+ color: 'black',
+ fontSize: 20,
+},
+
+addAgain: {
+  // flexDirection: 'row',
+  alignItems: 'flex-end',
+  
+  
+},
+
+buttonItem: {
+  // backgroundColor: '#b5cbde',
+  borderRadius: 20,
+  width: 30,
+  height: 30,
   justifyContent: 'center',
   alignItems: 'center',
-  marginTop: 22,
-},
-modalView: {
-  margin: 20,
-  backgroundColor: '#c3d2bd',
-  borderRadius: 20,
-  padding: 35,
-  paddingTop: 55,
-  alignItems: 'center',
-  shadowColor: '#000',
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 4,
-  elevation: 5,
-},
-modalText: {
-  marginBottom: 15,
-  textAlign: 'center',
-  fontSize: 25,
-  fontWeight: 'bold',
-},
-closeXView: {
-  // alignSelf: 'flex-end',
-  position: 'absolute',
-    top: 20,
-    right: 20, 
-},
-closeX: {
-  color: 'black',
-  fontSize: 23,
-  fontWeight: 'bold',
+  // color: '#094a85',
   
 },
-modalButtonsContainer: {
-  // flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  margin: 10,
-},
-cancelButton: {
-  backgroundColor: '#094a85', 
-  borderRadius: 20,
-  width: '80%',
-  elevation: 10,
-},
-cancelText: {
-  fontSize: 20,
-  color: 'white',
-  margin: 15,
-  fontWeight: 'bold',
-},
-deleteText: {
-  fontSize: 20,
-  color: 'white',
-  margin: 15,
-  fontWeight: 'bold',
-  textAlign: 'center',
-  // justifyContent: 'center',
-},
-deleteButton: {
-  backgroundColor: '#FF0000', 
-  borderRadius: 20, 
-  margin: 20,
-  // justifyContent: 'center',  // Center content vertically
-  // alignItems: 'center',
-  width: '80%',
-  elevation: 10,
-  // paddingVertical: 15,
-},  
-editModalButton: {
-  backgroundColor: '#094a85', 
-  borderRadius: 20,
-  elevation: 10,
+/*****Add Item Round Blue Button */    
+ button: {
+   width: 60,
+   height: 60,
+   borderRadius: 30,
+   backgroundColor: 'blue',
+   justifyContent: 'center',
+   alignItems: 'center',
+   position: 'absolute',
+   bottom: 10,
+   right: 10,
+   elevation: 5,
+ }, 
+ buttonsContainer: {
+   flexDirection: 'row',
+   alignItems: 'center',
+   justifyContent: 'space-between',
+   margin: 10,
   
-},
-deleteEditModalButton: {
-  backgroundColor: '#FF0000', 
-  borderRadius: 20, 
-  margin: 20,
-  width: 'auto',
-  elevation: 10,
-},
-storeData: {
-  marginTop: 10,
-  marginBottom: 30,
-  backgroundColor: 'white',
-  borderRadius: 10,
-  elevation: 5,
-},
-storeName: {
-  fontSize: 20,
-  color: 'black',
-  margin: 5,
-  alignSelf: 'center',
-},
-storeDesc: {
-  fontSize: 15,
-  color: 'black',
-  margin: 10,
-},
-  });
+ },
+ 
 
-export default Stores;
+/**********When List is Empty*******/
+ empty: {
+   flex: 1,
+   alignItems:'center',
+   justifyContent: 'center'
+ },
+ emptyText: {
+   color: 'white',
+   fontSize: 40,
+ },
+ text: {
+  fontSize: 30,
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+  color: 'white',
+},
+logo: {
+  width: 200,
+  height: 150,
+  margin: 20,
+},
+imageBody: {
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#C0C0C0'
+},
+ 
+});
+
+export default List;
