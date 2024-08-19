@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 
+
 function Splash({navigation}) {
     console.log('IN SPLASH JS')
     return (

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect}from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Tabs} from 'expo-router';
-import { useSelector } from 'react-redux';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { selectAllItems } from '../../redux/itemsSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -13,7 +13,60 @@ import { selectAllItems } from '../../redux/itemsSlice';
 
 export default function TabLayout() {
  
+  const dispatch = useDispatch()
   const router = useRouter()
+
+  useEffect(()=>{
+    getStores()
+    getList()
+  },[])
+ 
+
+  const getStores = async () => {
+    try {
+       const jsonValue = await AsyncStorage.getItem('Stores')
+       if(jsonValue !== null){  
+        const storesArray = JSON.parse(jsonValue)
+      
+        if(Array.isArray(storesArray)){
+          storesArray.forEach(obj => {
+        const thisStore = { id: obj.id, name: obj.name, description: obj.description, isStore: obj.isStore };
+        dispatch(addStore(thisStore));
+        });
+        } else {
+          console.error("Error loading items: Invalid data format")
+        }
+        
+       }
+    } catch (error) {
+      console.error('Error loading items:', error)
+      
+    }
+
+  }
+
+  const getList = async () => {
+    try {
+       const jsonValue = await AsyncStorage.getItem('Items')
+       if(jsonValue !== null){
+        const itemsArray = JSON.parse(jsonValue)
+      
+        if(Array.isArray(itemsArray)){
+          itemsArray.forEach(obj => {
+        const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
+        dispatch(addItem(thisItem));
+        });
+        } else {
+          console.error("Error loading items: Invalid data format")
+        }
+        
+       }
+    } catch (error) {
+      console.error('Error loading items:', error)
+      
+    }
+
+  }
 
   return (
     <Tabs
