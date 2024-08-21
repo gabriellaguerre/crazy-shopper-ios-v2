@@ -20,16 +20,12 @@ export default function RootLayout() {
     return () => clearTimeout(timer);
   }, []);
 
-
-
-  if(isSplash) {
-      return <Splash />
-  }
-
  
   return  (
     <Provider store={store}>
-
+    {isSplash ? (
+      <Splash />
+    ):(
      <Stack>
       <Stack.Screen name="(tabs)" options={{headerShown: false, }}/>
     
@@ -50,7 +46,8 @@ export default function RootLayout() {
                                                     fontSize: 25,
                                                     }}}/>
      </Stack>
-  
+
+    )}
     </Provider>
   )
 }
