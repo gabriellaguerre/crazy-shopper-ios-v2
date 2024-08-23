@@ -25,6 +25,7 @@ function Items({navigation, route, handleDoneClick}) {
   const items = useSelector(selectAllItems)
   const stores = useSelector(selectAllStores)
 
+  console.log(items, 'ITEMS IN ITEMS FXN')
   
   const [modalVisible, setModalVisible] = useState(false)
   const [thisId, setThisId] = useState('')
@@ -33,7 +34,7 @@ function Items({navigation, route, handleDoneClick}) {
   
     
   useEffect(()=>{
-      dispatch(deleteAllItems());
+      // dispatch(deleteAllItems());
       getList()
       // setThisStore({});
     },[])
@@ -45,9 +46,14 @@ function Items({navigation, route, handleDoneClick}) {
           const itemsArray = JSON.parse(jsonValue)
         
           if(Array.isArray(itemsArray)){
+            const existingItems = new Set(items.map(item => item.id)); // Set of existing item IDs
+            
             itemsArray.forEach(obj => {
-          const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
-          dispatch(addItem(thisItem));
+              if (!existingItems.has(obj.id)) { // Check if the item already exists
+              const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
+              dispatch(addItem(thisItem));
+            }
+              
           });
           } else {
             console.error("Error loading items: Invalid data format")
@@ -98,11 +104,8 @@ function Items({navigation, route, handleDoneClick}) {
        
     }
     const handleDone = () => {
-      // setThisStore({})
-      // navigation.setParams({query: null})
-      // thisStore = {}
-      // router.setParams({})
-      router.push("/list")
+     
+      router.push({pathname: "/"})
     }
 
     const returnStore = async (store) => {

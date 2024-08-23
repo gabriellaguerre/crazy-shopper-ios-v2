@@ -27,7 +27,7 @@ function Stores({navigation}) {
 
   // console.log(stores, 'sssssssssssss')
   useEffect(()=>{
-      dispatch(deleteAllStores());
+      // dispatch(deleteAllStores());
       getStores()
       getList()
     },[])
@@ -51,9 +51,12 @@ function Stores({navigation}) {
           const storesArray = JSON.parse(jsonValue)
         
           if(Array.isArray(storesArray)){
+            const existingStores = new Set(stores.map(store => store.id)); // Set of existing store IDs
             storesArray.forEach(obj => {
-          const thisStore = { id: obj.id, name: obj.name, description: obj.description, isStore: obj.isStore };
-          dispatch(addStore(thisStore));
+              if (!existingStores.has(obj.id)) { // Check if the store already exists
+              const thisStore = { id: obj.id, name: obj.name, description: obj.description, isStore: obj.isStore };
+               dispatch(addStore(thisStore));
+              }
           });
           } else {
             console.error("Error loading items: Invalid data format")
@@ -74,9 +77,13 @@ function Stores({navigation}) {
           const itemsArray = JSON.parse(jsonValue)
         
           if(Array.isArray(itemsArray)){
+            const existingItems = new Set(items.map(item => item.id)); // Set of existing item IDs
+            
             itemsArray.forEach(obj => {
-          const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
-          dispatch(addItem(thisItem));
+              if (!existingItems.has(obj.id)) { // Check if the item already exists
+              const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
+              dispatch(addItem(thisItem));
+            }
           });
           } else {
             console.error("Error loading items: Invalid data format")

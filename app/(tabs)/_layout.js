@@ -13,61 +13,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabLayout() {
  
-  const dispatch = useDispatch()
   const router = useRouter()
 
-  useEffect(()=>{
-    getStores()
-    getList()
-  },[])
- 
-
-  const getStores = async () => {
-    try {
-       const jsonValue = await AsyncStorage.getItem('Stores')
-       if(jsonValue !== null){  
-        const storesArray = JSON.parse(jsonValue)
-      
-        if(Array.isArray(storesArray)){
-          storesArray.forEach(obj => {
-        const thisStore = { id: obj.id, name: obj.name, description: obj.description, isStore: obj.isStore };
-        dispatch(addStore(thisStore));
-        });
-        } else {
-          console.error("Error loading items: Invalid data format")
-        }
-        
-       }
-    } catch (error) {
-      console.error('Error loading items:', error)
-      
-    }
-
-  }
-
-  const getList = async () => {
-    try {
-       const jsonValue = await AsyncStorage.getItem('Items')
-       if(jsonValue !== null){
-        const itemsArray = JSON.parse(jsonValue)
-      
-        if(Array.isArray(itemsArray)){
-          itemsArray.forEach(obj => {
-        const thisItem = { id: obj.id, item: obj.item, desc: obj.desc, price: obj.price, isItem:obj.isItem, isList: obj.isList, isDone: obj.isDone, storeName: obj.storeName };
-        dispatch(addItem(thisItem));
-        });
-        } else {
-          console.error("Error loading items: Invalid data format")
-        }
-        
-       }
-    } catch (error) {
-      console.error('Error loading items:', error)
-      
-    }
-
-  }
-
+  
   return (
     <Tabs
       screenOptions={({ route }) => ({
