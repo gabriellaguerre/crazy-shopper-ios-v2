@@ -116,13 +116,13 @@ function AddItemForm({navigation, route}) {
             onChangeText={(value)=>setItemName(value)}
             />
 
-        <TextInput 
+        {/* <TextInput 
             style={styles.input}
             placeholder='Enter Item Description (optional)'
             value={desc}
             onChangeText={(value)=>setDesc(value)}
             multiline
-            />
+            /> */}
 
          {/* <TextInput 
             style={styles.input}

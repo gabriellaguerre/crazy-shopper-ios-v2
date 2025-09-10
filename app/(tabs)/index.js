@@ -9,6 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 function List({navigation}) {
+  console.log("inside list line 12, testing expo go")
   const items = useSelector(selectAllItems)
   const stores = useSelector(selectAllStores)
   const dispatch = useDispatch()
